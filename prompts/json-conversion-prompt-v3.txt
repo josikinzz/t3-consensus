@@ -1,0 +1,185 @@
+You are a JSON conversion specialist. Convert the consensus analysis below into a structured JSON format.
+
+CRITICAL: Follow these instructions EXACTLY. The JSON must be valid and parseable.
+
+## Model Name Mapping
+The consensus uses anonymous codes. Here's the mapping to real names:
+{{MODEL_CODE_MAPPING}}
+
+## Step-by-Step Process
+
+1. Read through the entire consensus text
+2. Pay special attention to the "Mention Quality Analysis" section
+3. Identify each theme/topic discussed
+4. For each theme, determine what each model's position was
+5. Classify positions as: agree, disagree, neutral, or not_mentioned
+6. Extract mention quality (direct, indirect, omitted) from the Mention Quality Analysis section
+7. Format everything as valid JSON
+
+## Required JSON Structure
+
+```json
+{
+  "themes": [
+    {
+      "name": "Theme Name Here",
+      "statement": "What was concluded about this theme",
+      "importance": "high|medium|low",
+      "modelPositions": {
+        "Model Name 1": {
+          "stance": "agree|disagree|neutral|not_mentioned",
+          "mentionType": "direct|indirect|omitted",
+          "quote": "Optional relevant quote",
+          "reasoning": "Brief explanation"
+        },
+        "Model Name 2": {
+          "stance": "agree|disagree|neutral|not_mentioned",
+          "mentionType": "direct|indirect|omitted",
+          "quote": "",
+          "reasoning": ""
+        }
+      },
+      "disagreements": []
+    }
+  ],
+  "insights": {
+    "mainConclusion": "Overall synthesis conclusion",
+    "keyFindings": ["finding 1", "finding 2"],
+    "surprisingPatterns": "Any unexpected observations",
+    "practicalImplications": "What this means"
+  },
+  "modelBehavior": {
+    "Model Name 1": {
+      "responseStyle": "concise|detailed|balanced|creative|analytical",
+      "tendencies": [],
+      "uniqueContributions": []
+    }
+  },
+  "consensusFormation": {
+    "pattern": "convergent|divergent|polarized|uniform",
+    "description": "How consensus developed"
+  }
+}
+```
+
+## Classification Guide
+
+**Stance Classification:**
+- `agree`: Model explicitly supports or endorses the theme
+- `disagree`: Model explicitly opposes or contradicts the theme
+- `neutral`: Model acknowledges but doesn't take a clear position
+- `not_mentioned`: Model didn't address this theme at all
+
+**Mention Type Classification (from Mention Quality Analysis section):**
+- `direct`: Model explicitly discusses the theme with clear, specific language (<i data-lucide="target"></i>)
+- `indirect`: Model implies or alludes to the theme without explicit statement (<i data-lucide="cloud"></i>)
+- `omitted`: Model doesn't address the theme at all (<i data-lucide="circle"></i>)
+
+**VALIDATION RULES:**
+- If stance is 'not_mentioned', mentionType MUST be 'omitted'
+- If mentionType is 'omitted', stance MUST be 'not_mentioned'
+- If mentionType is 'direct' or 'indirect', stance MUST be one of: 'agree', 'disagree', or 'neutral'
+
+**Importance Levels:**
+- `high`: Central to the discussion, mentioned by most models
+- `medium`: Relevant but not primary focus
+- `low`: Minor point or tangential mention
+
+**Response Styles:**
+- `concise`: Brief, to-the-point responses
+- `detailed`: Comprehensive, thorough responses
+- `balanced`: Mix of brevity and detail
+- `creative`: Novel or imaginative approaches
+- `analytical`: Data-driven, logical approaches
+
+## Example Conversion
+
+If the consensus says:
+"All models (llm-!, llm-@, llm-#) agreed that X is important. However, llm-! uniquely emphasized Y while llm-@ focused on Z."
+
+Convert to:
+```json
+{
+  "themes": [
+    {
+      "name": "Importance of X",
+      "statement": "X is universally recognized as important",
+      "importance": "high",
+      "modelPositions": {
+        "Claude Opus 4": {"stance": "agree", "mentionType": "direct", "quote": "", "reasoning": "Endorsed X as important"},
+        "DeepSeek R1": {"stance": "agree", "mentionType": "direct", "quote": "", "reasoning": "Endorsed X as important"},
+        "O4 Mini High": {"stance": "agree", "mentionType": "direct", "quote": "", "reasoning": "Endorsed X as important"}
+      },
+      "disagreements": []
+    }
+  ]
+}
+```
+
+## Extracting Mention Quality Data
+
+When you see the "Mention Quality Analysis" section in the consensus text:
+1. Look for Lucide icon indicators: <i data-lucide="target"></i> (direct), <i data-lucide="cloud"></i> (indirect), <i data-lucide="circle"></i> (omitted)
+2. Map each model to its mention type based on which list it appears in
+3. Example from consensus text:
+   ```
+   **Theme: Data Privacy**
+   - <i data-lucide="target"></i> **Direct mentions:** llm-!, llm-@ (explicitly discussed with specific language)
+   - <i data-lucide="cloud"></i> **Indirect mentions:** llm-# (implied or alluded to without explicit statement)
+   - <i data-lucide="circle"></i> **Omitted:** llm-$, llm-% (theme not addressed at all)
+   ```
+   Maps to:
+   ```json
+   "modelPositions": {
+     "Claude Opus 4": {"mentionType": "direct", ...},
+     "DeepSeek R1": {"mentionType": "direct", ...},
+     "O4 Mini High": {"mentionType": "indirect", ...},
+     "Qwen3 30B": {"mentionType": "omitted", "stance": "not_mentioned", ...},
+     "Grok 3 Beta": {"mentionType": "omitted", "stance": "not_mentioned", ...}
+   }
+   ```
+
+## Common Mistakes to Avoid
+
+1. ❌ DON'T include the anonymous codes (llm-!, etc.) in the output
+2. ❌ DON'T calculate percentages or scores
+3. ❌ DON'T leave out models - every model needs a position for every theme
+4. ❌ DON'T use invalid JSON syntax (check quotes, commas, brackets)
+5. ❌ DON'T add fields not in the schema
+6. ❌ DON'T forget to extract mentionType from the Mention Quality Analysis section
+
+## Final Checklist
+
+Before returning the JSON, verify:
+✓ All anonymous codes replaced with real model names
+✓ Every theme has all models listed in modelPositions
+✓ Valid JSON syntax (proper quotes, no trailing commas)
+✓ All required fields present
+✓ No calculations or percentages included
+✓ All quotes inside strings are properly escaped with backslash
+✓ No actual newlines inside strings (use \n instead)
+✓ No tabs or special characters that break JSON
+✓ Every model position has BOTH stance AND mentionType fields
+✓ Validation rules followed: if mentionType='omitted' then stance='not_mentioned'
+
+## CRITICAL JSON RULES
+
+1. Inside JSON strings, these characters MUST be escaped:
+   - Double quotes: " becomes \"
+   - Newlines: actual newline becomes \n
+2. Example of CORRECT escaping:
+   - WRONG: "quote": "He said "Hello" to me"
+   - RIGHT: "quote": "He said \"Hello\" to me"
+
+3. NEVER include actual line breaks in strings:
+   - WRONG: "text": "Line one
+   Line two"
+   - RIGHT: "text": "Line one\nLine two"
+
+## Consensus Text to Convert
+
+{{CONSENSUS_TEXT}}
+
+---
+
+Return ONLY the JSON object. No explanations, no markdown, just pure JSON.

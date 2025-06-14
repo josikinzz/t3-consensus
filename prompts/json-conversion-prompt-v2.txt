@@ -1,0 +1,67 @@
+Convert the following consensus analysis into a structured JSON format. Extract and classify model positions WITHOUT performing any calculations.
+
+IMPORTANT: The consensus analysis uses anonymous model codes (llm-!, llm-@, etc.). Here is the mapping to actual model names:
+{{MODEL_CODE_MAPPING}}
+
+When creating the JSON output, replace the anonymous model codes with the actual model names using the mapping above.
+
+Please structure the data as follows:
+{
+    "themes": [
+        {
+            "name": "theme name",
+            "statement": "what was concluded about this theme",
+            "modelPositions": {
+                "Actual Model Name 1": {
+                    "stance": "agree|disagree|neutral|not_mentioned",
+                    "quote": "relevant quote if available",
+                    "reasoning": "brief explanation of their position"
+                },
+                "Actual Model Name 2": {
+                    "stance": "agree|disagree|neutral|not_mentioned",
+                    "quote": "relevant quote if available",
+                    "reasoning": "brief explanation of their position"
+                }
+            },
+            "disagreements": [
+                {
+                    "model": "Actual Model Name",
+                    "position": "what they said",
+                    "significance": "why this disagreement matters"
+                }
+            ],
+            "importance": "high|medium|low"
+        }
+    ],
+    "insights": {
+        "mainConclusion": "overall synthesis conclusion",
+        "keyFindings": [
+            "finding 1",
+            "finding 2",
+            "finding 3"
+        ],
+        "surprisingPatterns": "any unexpected observations",
+        "practicalImplications": "what this means for decision-making"
+    },
+    "modelBehavior": {
+        "Actual Model Name 1": {
+            "responseStyle": "concise|detailed|balanced|creative|analytical",
+            "tendencies": ["tendency 1", "tendency 2"],
+            "uniqueContributions": ["contribution 1", "contribution 2"]
+        },
+        "Actual Model Name 2": {
+            "responseStyle": "concise|detailed|balanced|creative|analytical",
+            "tendencies": ["tendency 1", "tendency 2"],
+            "uniqueContributions": ["contribution 1", "contribution 2"]
+        }
+    },
+    "consensusFormation": {
+        "pattern": "convergent|divergent|polarized|uniform",
+        "description": "how the consensus developed"
+    }
+}
+
+Consensus analysis to convert:
+{{CONSENSUS_TEXT}}
+
+Return ONLY the JSON object, no other text. Do NOT calculate percentages, scores, or any numerical metrics.

@@ -1,0 +1,43 @@
+Convert the consensus to JSON. Use SINGLE QUOTES for all strings to avoid escaping issues.
+
+Model mapping:
+{{MODEL_CODE_MAPPING}}
+
+Return this EXACT format (copy and modify):
+{
+  'themes': [
+    {
+      'name': 'Theme Name',
+      'statement': 'What was concluded',
+      'importance': 'high',
+      'modelPositions': {
+        'Model Name 1': {'stance': 'agree', 'quote': '', 'reasoning': ''},
+        'Model Name 2': {'stance': 'disagree', 'quote': '', 'reasoning': ''}
+      },
+      'disagreements': []
+    }
+  ],
+  'insights': {
+    'mainConclusion': 'Summary',
+    'keyFindings': ['finding 1'],
+    'surprisingPatterns': '',
+    'practicalImplications': ''
+  },
+  'modelBehavior': {},
+  'consensusFormation': {
+    'pattern': 'uniform',
+    'description': ''
+  }
+}
+
+RULES:
+- Use SINGLE QUOTES (') not double quotes (")
+- Replace llm codes with real names
+- Every model needs a position
+- Keep quotes short, no line breaks
+- Stance: agree/disagree/neutral/not_mentioned
+
+Consensus:
+{{CONSENSUS_TEXT}}
+
+Return ONLY the JSON with single quotes.

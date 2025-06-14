@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>t3.consensus - Multi-Model Consensus Engine</title>
+    <link rel="stylesheet" href="multi-llm-consensus-chat-vanilla.css">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1 class="main-title">t3.consensus</h1>
+            <p class="subtitle">Multi-model consensus synthesis for enhanced AI insights</p>
+        </header>
+
+        <!-- API Key Input Section -->
+        <div class="api-key-input-section" id="apiKeySection">
+            <div class="api-key-container neu-outset">
+                <div class="api-key-input-group">
+                    <input 
+                        type="password" 
+                        id="apiKeyInput" 
+                        class="api-key-input neu-textarea" 
+                        placeholder="Enter your OpenRouter API key..."
+                        autocomplete="off"
+                    >
+                    <button type="button" id="apiKeySetBtn" class="neu-button neu-button-primary api-key-btn">
+                        Set API Key
+                    </button>
+                </div>
+                <p class="api-key-hint">Get your API key from <a href="https://openrouter.ai/keys" target="_blank" rel="noopener">openrouter.ai/keys</a></p>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main>
+            <!-- User Input Form -->
+            <form id="userForm" class="user-form neu-outset">
+                <!-- Header with title and copy button -->
+                <div class="card-header-row">
+                    <h2 class="section-title-in-card">Prompt</h2>
+                    <button type="button" class="copy-button user-prompt-copy" title="Copy prompt">
+                        <svg class="copy-icon copy-icon-default" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M10.5 1.5A1.5 1.5 0 0112 3v8a1.5 1.5 0 01-1.5 1.5h-5A1.5 1.5 0 014 11V3a1.5 1.5 0 011.5-1.5h5zm0 1h-5a.5.5 0 00-.5.5v8a.5.5 0 00.5.5h5a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5z"/>
+                            <path d="M13 4.5V12a1.5 1.5 0 01-1.5 1.5H6v1h5.5A2.5 2.5 0 0014 12V4.5h-1z"/>
+                        </svg>
+                        <svg class="copy-icon copy-icon-copied" width="16" height="16" viewBox="0 0 16 16" fill="currentColor" style="display: none;">
+                            <path d="M13.854 3.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3.5-3.5a.5.5 0 11.708-.708L6.5 10.293l6.646-6.647a.5.5 0 01.708 0z"/>
+                        </svg>
+                    </button>
+                </div>
+                
+                <!-- Prompt Section -->
+                <div class="form-section prompt-section">
+                    <textarea 
+                        id="userPrompt" 
+                        class="neu-textarea" 
+                        rows="5" 
+                        placeholder="Enter your prompt here..."
+                        required
+                    ></textarea>
+                </div>
+
+                <!-- Model Selection Section -->
+                <div class="form-section model-selection-compact">
+                    <div class="label-row">
+                        <label>Select LLM Instances (at least 1):</label>
+                        <div class="selection-controls">
+                            <div class="model-preset-buttons">
+                                <button type="button" class="preset-button" id="cheapTestPreset">Cheapest</button>
+                                <button type="button" class="preset-button" id="expensiveBestPreset">Bestest</button>
+                            </div>
+                            <label class="neu-checkbox-label select-all-label">
+                                <input type="checkbox" class="neu-checkbox" id="selectAll">
+                                <span>Select All</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="model-grid compact" id="modelGrid">
+                        <!-- Models will be inserted here by JavaScript -->
+                    </div>
+                    <div class="expand-models-container">
+                        <button type="button" class="expand-models-btn" id="expandModelsBtn">
+                            <span class="expand-icon">▶</span>
+                            <span class="expand-text">Show More Options</span>
+                        </button>
+                        
+                        <!-- Hidden expanded section for models and options -->
+                        <div class="expanded-options" id="expandedOptions" style="display: none;">
+                            <!-- Model Selection for Consensus and JSON -->
+                            <div class="model-selection-section">
+                                <div class="model-selection-grid">
+                                    <div class="model-selection-group">
+                                        <label for="consensusModelSelect" class="model-selection-label">Consensus Model:</label>
+                                        <select id="consensusModelSelect" name="consensusModel" class="neu-select">
+                                            <option value="google/gemini-2.5-flash-preview:thinking">Gemini 2.5 Flash Thinking</option>
+                                            <option value="google/gemini-2.5-pro-preview" selected>Gemini 2.5 Pro</option>
+                                            <option value="openai/gpt-4.1">GPT-4.1</option>
+                                        </select>
+                                    </div>
+                                    <div class="model-selection-group">
+                                        <label for="jsonModelSelect" class="model-selection-label">JSON Conversion Model:</label>
+                                        <select id="jsonModelSelect" name="jsonModel" class="neu-select">
+                                            <option value="google/gemini-2.5-flash-preview:thinking">Gemini 2.5 Flash Thinking</option>
+                                            <option value="google/gemini-2.5-pro-preview">Gemini 2.5 Pro</option>
+                                            <option value="openai/gpt-4.1" selected>GPT-4.1</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Collapse button appears below when expanded -->
+                            <button type="button" class="expand-models-btn collapse-btn" id="collapseModelsBtn" style="display: none;">
+                                <span class="expand-icon">▼</span>
+                                <span class="expand-text">Show Fewer Options</span>
+                            </button>
+                        </div>
+                    </div>
+                    <p class="error-message" id="modelError" style="display: none;">Please select at least one LLM.</p>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="neu-button neu-button-primary submit-button" id="submitButton">
+                    <span id="submitText">Synthesize Consensus</span>
+                    <div class="spinner" id="submitSpinner" style="display: none;"></div>
+                </button>
+            </form>
+
+            <!-- Response Display -->
+            <div id="responseContainer" style="display: none;">
+                <!-- Individual Responses Section -->
+                <section id="individualResponsesSection" style="display: none;">
+                    <div class="neu-outset responses-container" id="responsesContainer">
+                        <div class="card-header-row">
+                            <h2 class="section-title-in-card">Outputs</h2>
+                            <button type="button" class="responses-toggle-btn" id="responsesToggleBtn" style="display: none;">
+                                <svg class="chevron-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M7 10l5 5 5-5z"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="response-grid" id="individualResponsesGrid">
+                            <!-- Individual response cards will be inserted here -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Consensus Output Section -->
+                <section id="consensusSection" style="display: none;">
+                    <div class="neu-outset consensus-container" id="consensusContainer">
+                        <div class="card-header-row">
+                            <h2 class="section-title-in-card">Consensus</h2>
+                            <button type="button" class="consensus-toggle-btn" id="consensusToggleBtn">
+                                <svg class="chevron-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M7 10l5 5 5-5z"/>
+                                </svg>
+                            </button>
+                        </div>
+                        
+                        <div class="consensus-content" id="consensusContent">
+                            <!-- Loading State -->
+                        <div id="consensusLoading" style="display: none;">
+                            <div class="loading-message">
+                                <div class="spinner-dark"></div>
+                                <span id="consensusLoadingText">Forming consensus... Please wait.</span>
+                            </div>
+                        </div>
+
+                        <!-- Error State -->
+                        <div id="consensusError" class="error-message" style="display: none;"></div>
+
+                        <!-- Consensus Tabs -->
+                        <div class="consensus-tabs" id="consensusTabs" style="display: none;">
+                            <button class="consensus-tab active" data-tab="organized">Summary & Analysis</button>
+                            <button class="consensus-tab" data-tab="raw">Raw Output</button>
+                            <button class="consensus-tab" data-tab="prompt">Consensus Prompt</button>
+                        </div>
+
+                        <!-- Tab Content -->
+                        <div class="consensus-tab-content">
+                            <!-- Organized Data Tab -->
+                            <div id="organizedTab" class="consensus-tab-pane active">
+                                <div id="consensusOutput"></div>
+                            </div>
+                            
+                            <!-- Raw Output Tab -->
+                            <div id="rawTab" class="consensus-tab-pane" style="display: none;">
+                                <div class="raw-consensus-actions">
+                                    <button class="copy-button copy-raw-consensus-btn" title="Copy Raw Output">
+                                        <svg class="copy-icon copy-icon-default" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                            <path d="M10.5 1.5A1.5 1.5 0 0112 3v8a1.5 1.5 0 01-1.5 1.5h-5A1.5 1.5 0 014 11V3a1.5 1.5 0 011.5-1.5h5zm0 1h-5a.5.5 0 00-.5.5v8a.5.5 0 00.5.5h5a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5z"/>
+                                            <path d="M13 4.5V12a1.5 1.5 0 01-1.5 1.5H6v1h5.5A2.5 2.5 0 0014 12V4.5h-1z"/>
+                                        </svg>
+                                        <svg class="copy-icon copy-icon-copied" width="16" height="16" viewBox="0 0 16 16" fill="currentColor" style="display: none;">
+                                            <path d="M13.854 3.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3.5-3.5a.5.5 0 11.708-.708L6.5 10.293l6.646-6.647a.5.5 0 01.708 0z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <textarea id="rawConsensusOutput" class="raw-consensus-textarea" readonly></textarea>
+                            </div>
+                            
+                            <!-- Consensus Prompt Tab -->
+                            <div id="promptTab" class="consensus-tab-pane" style="display: none;">
+                                <div class="raw-consensus-actions">
+                                    <button class="copy-button copy-consensus-prompt-btn" title="Copy Consensus Prompt">
+                                        <svg class="copy-icon copy-icon-default" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                            <path d="M10.5 1.5A1.5 1.5 0 0112 3v8a1.5 1.5 0 01-1.5 1.5h-5A1.5 1.5 0 014 11V3a1.5 1.5 0 011.5-1.5h5zm0 1h-5a.5.5 0 00-.5.5v8a.5.5 0 00.5.5h5a.5.5 0 00.5-.5V3a.5.5 0 00-.5-.5z"/>
+                                            <path d="M13 4.5V12a1.5 1.5 0 01-1.5 1.5H6v1h5.5A2.5 2.5 0 0014 12V4.5h-1z"/>
+                                        </svg>
+                                        <svg class="copy-icon copy-icon-copied" width="16" height="16" viewBox="0 0 16 16" fill="currentColor" style="display: none;">
+                                            <path d="M13.854 3.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3.5-3.5a.5.5 0 11.708-.708L6.5 10.293l6.646-6.647a.5.5 0 01.708 0z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="consensus-prompt-content" id="consensusPromptContent"></div>
+                            </div>
+                        </div>
+
+                            <!-- Grounding Sources -->
+                            <div id="groundingSources" class="grounding-sources" style="display: none;">
+                                <h4>Retrieved Sources (Google Search):</h4>
+                                <ul id="groundingSourcesList"></ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- JSON Visualization Section -->
+                <section id="jsonVisualizationSection" style="display: none;">
+                    <div class="neu-outset analytics-container" id="analyticsContainer">
+                        <div class="card-header-row">
+                            <h2 class="section-title-in-card">Experimental Analytics</h2>
+                            <button type="button" class="analytics-toggle-btn" id="analyticsToggleBtn">
+                                <svg class="chevron-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M7 10l5 5 5-5z"/>
+                                </svg>
+                            </button>
+                        </div>
+                        
+                        <div class="analytics-content-wrapper" id="analyticsContentWrapper">
+                            <!-- Loading State -->
+                        <div id="jsonLoading" style="display: none;">
+                            <div class="loading-message">
+                                <div class="spinner-dark"></div>
+                                <span id="jsonLoadingText">Analyzing consensus patterns...</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Error State -->
+                        <div id="jsonError" class="error-message" style="display: none;"></div>
+                        
+                        <!-- Analytics Content (hidden during loading) -->
+                        <div id="analyticsContent" style="display: none;">
+                            <!-- Main Tabs (moved to top) -->
+                            <div class="view-tabs">
+                                <button class="view-tab active" data-view="synthesis">Summary Dashboard</button>
+                                <button class="view-tab" data-view="analytics">Model Comparison</button>
+                                <button class="view-tab" data-view="raw">Technical Details</button>
+                            </div>
+                            
+                            <!-- View Containers -->
+                            <div class="view-container">
+                                <!-- Synthesis View -->
+                                <div id="synthesisView" class="view-pane active">
+                                    <!-- Key Insights Summary (always visible) -->
+                                    <div id="insightsDashboard" class="insights-dashboard">
+                                        <!-- Dashboard content will be dynamically inserted -->
+                                    </div>
+                                    
+                                    <!-- Collapsible Synthesis Sections -->
+                                    <details class="neu-details synthesis-details" id="synthesisDetails">
+                                        <summary><span><i data-lucide="bar-chart-3"></i> Summary Details</span></summary>
+                                        <div class="details-content">
+                                            <div id="jsonVisualization"></div>
+                                        </div>
+                                    </details>
+                                </div>
+                            
+                                <!-- Analytics View -->
+                                <div id="analyticsView" class="view-pane" style="display: none;">
+                                    <!-- Collapsible Analytics Sections -->
+                                    <details class="neu-details analytics-details" id="controversyDetails">
+                                        <summary><span><i data-lucide="flame"></i> Disagreement Levels</span></summary>
+                                        <div class="details-content">
+                                            <div id="controversyContent" class="analytics-section-content">
+                                                <!-- Controversy heatmap will be inserted here -->
+                                            </div>
+                                        </div>
+                                    </details>
+                                    
+                                    <details class="neu-details analytics-details" id="agreementDetails">
+                                        <summary><span><i data-lucide="handshake"></i> How Models Compare</span></summary>
+                                        <div class="details-content">
+                                            <div id="agreementContent" class="analytics-section-content">
+                                                <!-- Model agreement matrix will be inserted here -->
+                                            </div>
+                                        </div>
+                                    </details>
+                                    
+                                    <details class="neu-details analytics-details" id="behaviorDetails">
+                                        <summary><span><i data-lucide="brain"></i> AI Model Profiles</span></summary>
+                                        <div class="details-content">
+                                            <div id="behaviorContent" class="analytics-section-content">
+                                                <!-- Model behavior analysis will be inserted here -->
+                                            </div>
+                                        </div>
+                                    </details>
+                                    
+                                    <details class="neu-details analytics-details" id="flowDetails">
+                                        <summary><span><i data-lucide="waves"></i> Agreement Breakdown</span></summary>
+                                        <div class="details-content">
+                                            <div id="flowContent" class="analytics-section-content">
+                                                <!-- Consensus flow will be inserted here -->
+                                            </div>
+                                        </div>
+                                    </details>
+                                </div>
+                                
+                                <!-- Raw Data View -->
+                                <div id="rawDataView" class="view-pane" style="display: none;">
+                                    <!-- Collapsible Raw Data Sections -->
+                                    <details class="neu-details raw-data-details" id="jsonOutputDetails">
+                                        <summary><span><i data-lucide="file-text"></i> Structured JSON Output</span></summary>
+                                        <div class="details-content">
+                                            <div id="jsonOutputContent" class="raw-data-section-content">
+                                                <!-- JSON output will be inserted here -->
+                                            </div>
+                                        </div>
+                                    </details>
+                                    
+                                    <details class="neu-details raw-data-details" id="rawPromptDetails">
+                                        <summary><span><i data-lucide="settings"></i> Processing Prompt</span></summary>
+                                        <div class="details-content">
+                                            <div id="rawPromptContent" class="raw-data-section-content">
+                                                <!-- Raw prompt will be inserted here -->
+                                            </div>
+                                        </div>
+                                    </details>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            
+            <!-- Shoggoth Image (hidden by default, shown after analytics) -->
+            <div id="shoggothImage" class="shoggoth-image-container" style="display: none;">
+                <img src="t3 shoggoths.webp" alt="T3 Shoggoths" class="shoggoth-image">
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Made by Josie Kins & Claude Code</p>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script type="module" src="modules/app.js"></script>
+    <script>
+        // Initialize Lucide icons on page load and whenever new content is added
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+        });
+        
+        // Global function to refresh icons after dynamic content updates
+        window.refreshLucideIcons = function() {
+            lucide.createIcons();
+        };
+    </script>
+</body>
+</html>
