@@ -9,7 +9,7 @@ The project was refactored from a large monolithic JavaScript file (2640 lines) 
 ### File Structure
 ```
 /multi-llm-consensus-vanilla/
-├── multi-llm-consensus-chat-vanilla.html  # Main HTML file
+├── consensus.html                          # Main HTML file
 ├── multi-llm-consensus-chat-vanilla.css   # Styles (flat design, previously neumorphic)
 ├── modules/                                # ES6 JavaScript modules
 │   ├── app.js        # Main application coordinator
